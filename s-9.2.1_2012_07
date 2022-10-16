@@ -1,0 +1,31 @@
+URI parancsok
+
+lásd: s-9.2.1_dcc_extended_packet_formats.pdf
+
+<IPAddress>"/ce"<Channel Nr><DCC Address><DCC instruction-bytes><DCC CRC>
+
+<IPAddress> 	pl. "192.168.4.1"
+<Channel Nr>  	pl. "00" v. "01" ... "09"
+<DCC Address>	pl. "00"  (bradcast)
+					"FF"  (idle)
+					"03"  (address 3)
+					"7f"  (address 127)
+					"80"  (address 128)
+					"BF"  (address 191)
+					"C000"  (address 192) Multi-Function Decoders with 14 bit addresses
+					"E700"  (address 231) Multi-Function Decoders with 14 bit addresses
+					"E800"  (address 231) Reserved for Future Use
+					"FC00"  (address 231) Reserved for Future Use
+					"FD00"  (address 253) Advanced Extended Packet Formats (refer to S-9.2.1.1)
+<instruction-bytes> =  	CCCDDDDD,
+						CCCDDDDD  0    DDDDDDDD,
+						CCCDDDDD  0  DDDDDDDD  0  DDDDDDDD 	
+				CCC	: 					
+				000 Decoder and Consist  Control  Instruction
+				001 Advanced Operation Instructions
+				010 Speed and Direction Instruction for reverse operation
+				011 Speed and Direction Instruction for forward operation
+				100 Function Group One Instruction
+				101 Function Group Two Instruction
+				110 Future Expansion
+				111 Configuration Variable Access Instruction 
