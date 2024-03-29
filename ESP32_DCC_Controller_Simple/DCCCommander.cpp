@@ -12,8 +12,10 @@
 
  // Stop button is attached to PIN 0 (IO0)
 #define BTN_STOP_ALARM      0
-#define DCC_RAIL1_OUT_PIN  17
-#define DCC_RAIL2_OUT_PIN  16
+#define DCC_RAIL1_OUT_PIN  18
+#define DCC_RAIL2_OUT_PIN   5
+#define DCC_RAIL3_OUT_PIN  17
+#define DCC_RAIL4_OUT_PIN  16
 #define DCC_RAILEN_OUT_PIN  4
 #define DCC_POCKET_OUT_PIN  2
 #define DCC_RAIL_IN_PIN    15
@@ -150,15 +152,21 @@ void IRAM_ATTR onTimer() {
 
     portEXIT_CRITICAL_ISR(&timerMux);
 
-    if (isrStatus == 0)
-        digitalWrite(DCC_POCKET_OUT_PIN, true);
-    else
+    if (isrStatus == 0){
         digitalWrite(DCC_POCKET_OUT_PIN, false);
+    }
+    else {
+        digitalWrite(DCC_POCKET_OUT_PIN, true);
+    }
 
     if ((!(isrStatus & 1)) && ((isrStatus  >> 1) > isrPacket[isrChannel][0] + 1))
+    {
         digitalWrite(DCC_RAILEN_OUT_PIN, true);
+    }
     else
+    {
         digitalWrite(DCC_RAILEN_OUT_PIN, false);
+    }
 
     isrLoop++;
     if (isrLoop == 120000)
@@ -171,10 +179,20 @@ void IRAM_ATTR onTimer() {
     }
     else {
         if (isrPhase & 1) {
+            digitalWrite(DCC_RAILEN_OUT_PIN, false);
             digitalWrite(DCC_RAIL1_OUT_PIN, false);
+            digitalWrite(DCC_RAIL2_OUT_PIN, false);
+            digitalWrite(DCC_RAIL3_OUT_PIN, true);
+            digitalWrite(DCC_RAIL4_OUT_PIN, true);
+            digitalWrite(DCC_RAILEN_OUT_PIN, true);
         }
         else {
+            digitalWrite(DCC_RAILEN_OUT_PIN, false);
+            digitalWrite(DCC_RAIL3_OUT_PIN, false);
+            digitalWrite(DCC_RAIL4_OUT_PIN, false);
             digitalWrite(DCC_RAIL1_OUT_PIN, true);
+            digitalWrite(DCC_RAIL2_OUT_PIN, true);
+            digitalWrite(DCC_RAILEN_OUT_PIN, true);
         }
     }
     if (isrBit)
