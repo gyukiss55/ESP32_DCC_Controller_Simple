@@ -6,8 +6,10 @@
 #include <WiFi.h>
 
 // Replace with your network credentials
-const char* ssid = "ASUS_98_2G";
-const char* password = "DadoliMa55";
+const char* ssid = "RTAX999_EXT";
+//const char* password = "LiDoDa[959285]";
+//const char* password = "LiDoDa(959285)";
+const char* password = "LiDoDa#959285$";
 
 // Set web server port number to 80
 WiFiServer server(80);
