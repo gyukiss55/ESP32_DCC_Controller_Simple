@@ -72,6 +72,7 @@ void IRAM_ATTR onTimer() {
 
     portENTER_CRITICAL_ISR(&timerMux);
     isrCounter++;
+    digitalWrite(DCC_RAILEN_OUT_PIN, false);
 
     isrBootTime = esp_timer_get_time();
     isrPhase++;
@@ -100,7 +101,7 @@ void IRAM_ATTR onTimer() {
             isrPhaseLimit = 2 * 32;
         }
         else {
-            digitalWrite(DCC_RAIL2_OUT_PIN, true);//debug
+            //digitalWrite(DCC_RAIL2_OUT_PIN, true);//debug
             
             isrStatus = 0;
             isrPhaseLimit = 2 * 18;
@@ -179,24 +180,28 @@ void IRAM_ATTR onTimer() {
         xSemaphoreGiveFromISR(timerSemaphore, NULL);
 
     if ((!(isrStatus & 1)) && ((isrStatus >> 1) > isrPacket[isrChannel][0] + 1)) {
-        digitalWrite(DCC_RAIL1_OUT_PIN, true);
+            digitalWrite(DCC_RAILEN_OUT_PIN, false);
+            digitalWrite(DCC_RAIL2_OUT_PIN, false);
+            digitalWrite(DCC_RAIL3_OUT_PIN, false);
+            digitalWrite(DCC_RAIL1_OUT_PIN, true);
+            digitalWrite(DCC_RAIL4_OUT_PIN, true);
     }
     else {
         if (isrPhase & 1) {
             digitalWrite(DCC_RAILEN_OUT_PIN, false);
             digitalWrite(DCC_RAIL1_OUT_PIN, false);
-            digitalWrite(DCC_RAIL2_OUT_PIN, false);
+            digitalWrite(DCC_RAIL4_OUT_PIN, false);
+            digitalWrite(DCC_RAIL2_OUT_PIN, true);
             digitalWrite(DCC_RAIL3_OUT_PIN, true);
-            digitalWrite(DCC_RAIL4_OUT_PIN, true);
-            digitalWrite(DCC_RAILEN_OUT_PIN, true);
+            //digitalWrite(DCC_RAILEN_OUT_PIN, true);
         }
         else {
             digitalWrite(DCC_RAILEN_OUT_PIN, false);
+            digitalWrite(DCC_RAIL2_OUT_PIN, false);
             digitalWrite(DCC_RAIL3_OUT_PIN, false);
-            digitalWrite(DCC_RAIL4_OUT_PIN, false);
             digitalWrite(DCC_RAIL1_OUT_PIN, true);
-            digitalWrite(DCC_RAIL2_OUT_PIN, true);
-            digitalWrite(DCC_RAILEN_OUT_PIN, true);
+            digitalWrite(DCC_RAIL4_OUT_PIN, true);
+            //digitalWrite(DCC_RAILEN_OUT_PIN, true);
         }
     }
     if (isrBit)
@@ -204,7 +209,8 @@ void IRAM_ATTR onTimer() {
     else
         timerAlarmWrite(timer, DCC_0HALFBITTIME, true);
 
-   digitalWrite(DCC_RAIL2_OUT_PIN, false);//debug
+   //digitalWrite(DCC_RAIL2_OUT_PIN, false);//debug
+   digitalWrite(DCC_RAILEN_OUT_PIN, true);
 
 }
 
@@ -242,12 +248,17 @@ void setupDCCCommander()
     isrPacket[isrChannel][3] = isrPacket[isrChannel][1]  ^ isrPacket[isrChannel][2];
     isrChannel = 0;
 
+    pinMode(DCC_RAILEN_OUT_PIN, OUTPUT);
+    digitalWrite(DCC_RAILEN_OUT_PIN, false);
+
     pinMode(DCC_RAIL1_OUT_PIN, OUTPUT);
     digitalWrite(DCC_RAIL1_OUT_PIN, false);
     pinMode(DCC_RAIL2_OUT_PIN, OUTPUT);
     digitalWrite(DCC_RAIL2_OUT_PIN, false);
-    pinMode(DCC_RAILEN_OUT_PIN, OUTPUT);
-    digitalWrite(DCC_RAILEN_OUT_PIN, false);
+    pinMode(DCC_RAIL3_OUT_PIN, OUTPUT);
+    digitalWrite(DCC_RAIL3_OUT_PIN, false);
+    pinMode(DCC_RAIL4_OUT_PIN, OUTPUT);
+    digitalWrite(DCC_RAIL4_OUT_PIN, false);
 
     pinMode(DCC_POCKET_OUT_PIN, OUTPUT);
     digitalWrite(DCC_POCKET_OUT_PIN, false);
