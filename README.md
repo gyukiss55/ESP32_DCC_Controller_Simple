@@ -10,4 +10,11 @@ GND
 
 Simple WiFi Server
 
-V1.0.01. convert ESP32_DCC_Control source
+- 001 - V1.0.01. convert ESP32_DCC_Control source
+- 002 - V1.1.01. convert ESP32_DCC_Control source
+	// 4+1 bit control
+	#define DCC_RAIL1_OUT_PIN  18
+	#define DCC_RAIL2_OUT_PIN   5
+	#define DCC_RAIL3_OUT_PIN  17
+	#define DCC_RAIL4_OUT_PIN  16
+	#define DCC_RAILEN_OUT_PIN  4
