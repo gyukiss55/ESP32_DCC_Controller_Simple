@@ -6,10 +6,18 @@
 #include <WiFi.h>
 
 // Replace with your network credentials
-const char* ssid = "RTAX999_EXT";
+const char* ssid = "RTAX999";
+//const char* ssid = "RTAX999_EXT";
 //const char* password = "LiDoDa[959285]";
 //const char* password = "LiDoDa(959285)";
+//const char* password = "LiDoDa#959285$";
+
+//const char* ssid     = "HUAWEI P30";
+//const char* password = "6381bf07b666";
+
+//const char* ssid     = "ASUS_98_2G";
 const char* password = "LiDoDa#959285$";
+
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -32,8 +40,11 @@ void setupDCCWebServer() {
 //    digitalWrite(output27, LOW);
 
     // Connect to Wi-Fi network with SSID and password
+    Serial.print("Esp32 DCC controller Simple V1.0 ");
+
     Serial.print("Connecting to ");
     Serial.println(ssid);
+    Serial.println(password);
     WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);

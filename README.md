@@ -19,3 +19,4 @@ Simple WiFi Server
 	#define DCC_RAIL4_OUT_PIN  16
 	#define DCC_RAILEN_OUT_PIN  4
 - 003 - V1.1.02. fixing DCC_RAIL1_OUT_PIN, DCC_RAIL2_OUT_PIN 
+- 004 - V1.1.03. 2 - 4 PWM pin 

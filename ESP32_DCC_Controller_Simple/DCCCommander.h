@@ -9,4 +9,8 @@
 void setupDCCCommander();
 void loopDCCCommander();
 
+//#define DCC_1_PWM
+#define DCC_2_PWM
+//#define DCC_4_PWM
+
 #endif //_DCCCOMMANDER_H_

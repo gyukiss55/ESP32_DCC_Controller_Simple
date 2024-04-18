@@ -15,10 +15,17 @@
 
 // 4+1 bit control
 
+#if defined DCC_2_PWM
+#define DCC_RAIL1_OUT_PIN  17
+#define DCC_RAIL2_OUT_PIN  16
+#endif
+
+#if defined DCC_4_PWM
 #define DCC_RAIL1_OUT_PIN  18
 #define DCC_RAIL2_OUT_PIN   5
 #define DCC_RAIL3_OUT_PIN  17
 #define DCC_RAIL4_OUT_PIN  16
+#endif
 
 #define DCC_RAILEN_OUT_PIN  4
 #define DCC_POCKET_OUT_PIN  2
@@ -181,26 +188,44 @@ void IRAM_ATTR onTimer() {
 
     if ((!(isrStatus & 1)) && ((isrStatus >> 1) > isrPacket[isrChannel][0] + 1)) {
             digitalWrite(DCC_RAILEN_OUT_PIN, false);
+#if defined DCC_2_PWM            
+            digitalWrite(DCC_RAIL2_OUT_PIN, false);
+            digitalWrite(DCC_RAIL1_OUT_PIN, true);
+#endif
+#if defined DCC_4_PWM
             digitalWrite(DCC_RAIL2_OUT_PIN, false);
             digitalWrite(DCC_RAIL3_OUT_PIN, false);
             digitalWrite(DCC_RAIL1_OUT_PIN, true);
             digitalWrite(DCC_RAIL4_OUT_PIN, true);
+#endif
     }
     else {
         if (isrPhase & 1) {
             digitalWrite(DCC_RAILEN_OUT_PIN, false);
+#if defined DCC_2_PWM            
+            digitalWrite(DCC_RAIL1_OUT_PIN, false);
+            digitalWrite(DCC_RAIL2_OUT_PIN, true);
+#endif
+#if defined DCC_4_PWM
             digitalWrite(DCC_RAIL1_OUT_PIN, false);
             digitalWrite(DCC_RAIL4_OUT_PIN, false);
             digitalWrite(DCC_RAIL2_OUT_PIN, true);
             digitalWrite(DCC_RAIL3_OUT_PIN, true);
+#endif
             //digitalWrite(DCC_RAILEN_OUT_PIN, true);
         }
         else {
             digitalWrite(DCC_RAILEN_OUT_PIN, false);
+#if defined DCC_2_PWM            
+            digitalWrite(DCC_RAIL2_OUT_PIN, false);
+            digitalWrite(DCC_RAIL1_OUT_PIN, true);
+#endif
+#if defined DCC_4_PWM
             digitalWrite(DCC_RAIL2_OUT_PIN, false);
             digitalWrite(DCC_RAIL3_OUT_PIN, false);
             digitalWrite(DCC_RAIL1_OUT_PIN, true);
             digitalWrite(DCC_RAIL4_OUT_PIN, true);
+#endif
             //digitalWrite(DCC_RAILEN_OUT_PIN, true);
         }
     }
@@ -255,11 +280,12 @@ void setupDCCCommander()
     digitalWrite(DCC_RAIL1_OUT_PIN, false);
     pinMode(DCC_RAIL2_OUT_PIN, OUTPUT);
     digitalWrite(DCC_RAIL2_OUT_PIN, false);
+#if defined DCC_4_PWM
     pinMode(DCC_RAIL3_OUT_PIN, OUTPUT);
     digitalWrite(DCC_RAIL3_OUT_PIN, false);
     pinMode(DCC_RAIL4_OUT_PIN, OUTPUT);
     digitalWrite(DCC_RAIL4_OUT_PIN, false);
-
+#endif
     pinMode(DCC_POCKET_OUT_PIN, OUTPUT);
     digitalWrite(DCC_POCKET_OUT_PIN, false);
 
@@ -283,6 +309,7 @@ void setupDCCCommander()
 
     // Start an alarm
     timerAlarmEnable(timer);
+
     setupDCCWebServer();
 
 }
